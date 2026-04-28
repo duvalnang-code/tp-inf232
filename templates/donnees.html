@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Données collectées</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='sante.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+    <h1>Données des étudiants</h1>
+
+    <div class="nav-buttons">
+        <a href="{{ url_for('index') }}" class="btn">Accueil</a>
+        <a href="{{ url_for('analyse') }}" class="btn">Analyse</a>
+    </div>
+</header>
+
+<section class="table-section">
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Age</th>
+                <th>Sexe</th>
+                <th>Sommeil</th>
+                <th>Repas</th>
+                <th>Fastfood</th>
+                <th>Sport</th>
+                <th>Fatigue</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for d in donnees %}
+            <tr>
+                <td>{{ d[0] }}</td>
+                <td>{{ d[1] }}</td>
+                <td>{{ d[2] }}</td>
+                <td>{{ d[3] }}</td>
+                <td>{{ d[4] }} h</td>
+                <td>{{ d[5] }}</td>
+                <td>{{ d[6] }}</td>
+                <td>{{ d[7] }}</td>
+                <td>{{ d[8] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</section>
+
+</body>
+</html>

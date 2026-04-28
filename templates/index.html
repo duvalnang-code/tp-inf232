@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Analyse Santé Étudiants</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='sante.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Bienvenu</h1>
+        <nav>
+            <ol>
+                <li><a href="{{ url_for('afficher_donnees') }}"  class="btn">Donnees</a></li>
+                <li><a href="{{ url_for('analyse') }}" class="btn">Analyse</a></li>
+            </ol>
+        </nav>
+    </header>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-text">
+        <h1>Santé des Étudiants</h1>
+        <p>Comprendre l’impact du mode de vie sur votre santé d'etudiant</p>
+        <a href="#formulaire" class="btn">Commencer</a>
+    </div>
+</section>
+
+<!-- SECTION EXPLICATION -->
+<section class="about">
+    <h2>Pourquoi cette application ?</h2>
+    <p>
+        De nombreux étudiants souffrent de fatigue, de stress et de mauvaises habitudes
+        sans en connaître les causes. Cette application permet de collecter et analyser
+        ces données afin d’améliorer la qualité de vie.
+    </p>
+</section>
+
+<!-- SECTION AVEC IMAGES -->
+<section class="features">
+
+    <div class="feature">
+            <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773" alt="">
+        <h3>Sommeil</h3>
+        <p>Analyse de vos heures de sommeil et leur impact sur votre fatigue.</p>
+    </div>
+
+    <div class="feature">
+        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061" alt="">
+        <h3>Alimentation</h3>
+        <p>Étude des habitudes alimentaires des étudiants.</p>
+    </div>
+
+    <div class="feature">
+        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438" alt="">
+        <h3>Activité physique</h3>
+        <p>Relation entre le sport et le bien-être.</p>
+    </div>
+
+</section>
+
+<!-- FORMULAIRE -->
+<section class="form-section" id="formulaire">
+    <h2>Remplissez le formulaire</h2>
+
+    <form action="/" method="POST">
+
+        <label for="">Noms :</label>
+        <input type="text" required  name="nom">
+        <label>Âge :</label>
+        <input type="number" name="age"  min="1" max="150">
+
+        <label>Sexe :</label>
+        <select name="sexe" required>
+            <option value="">Choisir</option>
+            <option>Homme</option>
+            <option>Femme</option>
+        </select>
+
+        <label>Heures de sommeil :</label>
+        <input type="number" name="sommeil" min="0" max="24"  placeholder="nombre d'heures de sommeil par jours" required>
+
+        <label>Repas / jour :</label>
+        <input type="number" name="repas" min="0" required>
+
+        <label>Fast-food :</label>
+        <select name="fastfood">
+            <option>Oui</option>
+            <option>Non</option>
+        </select>
+
+        <label>Sport / semaine :</label>
+        <input type="number" name="sport"  min="0" max="7" placeholder="le nombre de jours que vous faites sport par semaine" required>
+
+        <label>Fatigue :</label>
+        <select name="fatigue" required>
+            <option>Faible</option>
+            <option>Moyen</option>
+            <option>Élevé</option>
+        </select>
+
+        <button type="submit">Envoyer</button>
+
+    </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>Projet INF232 - Santé des étudiants</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Analyse des données</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='sante.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>Analyse des données</h1>
+    <a href="{{ url_for('index') }}" class="btn-retour">Accueil</a>
+</header>
+
+<!-- ===== STATS ===== -->
+<div class="stats-container">
+    <div class="stat-box">
+        <h3>Âge moyen</h3>
+        <p>{{ moyennes[0] | round(1) }}</p>
+    </div>
+
+    <div class="stat-box">
+        <h3>Sommeil</h3>
+        <p>{{ moyennes[1] | round(1) }} h</p>
+    </div>
+
+    <div class="stat-box">
+        <h3>Repas</h3>
+        <p>{{ moyennes[2] | round(1) }}</p>
+    </div>
+
+    <div class="stat-box">
+        <h3>Sport</h3>
+        <p>{{ moyennes[3] | round(1) }} j</p>
+    </div>
+</div>
+
+<!-- ===== BAR ===== -->
+<h2 style="text-align:center;">Fatigue des étudiants</h2>
+<div class="chart-container">
+    <canvas id="barChart"></canvas>
+</div>
+
+<!-- ===== PIE ===== -->
+<h2 style="text-align:center;">Répartition de la fatigue</h2>
+<div class="chart-container">
+    <canvas id="pieChart"></canvas>
+</div>
+
+<!-- ===== SOMMEIL ===== -->
+<h2 style="text-align:center;">Sommeil selon la fatigue</h2>
+<div class="chart-container">
+    <canvas id="sleepChart"></canvas>
+</div>
+
+<!-- ===== CORRÉLATION + RÉGRESSION ===== -->
+<h2 style="text-align:center;">Corrélation + Régression</h2>
+<div class="chart-container">
+    <canvas id="corrChart"></canvas>
+</div>
+
+<!-- ===== INTERPRÉTATION ===== -->
+<div class="interpretation">
+    <h2>Interprétation</h2>
+    <p>{{ interpretation | safe }}</p>
+</div>
+
+<script>
+
+// ===== DONNÉES =====
+const fatigue = {{ fatigue_data | tojson }};
+const sommeil = {{ sommeil_fatigue | tojson }};
+const corr = {{ data_corr | tojson }};
+
+// ===== BAR =====
+new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: {
+        labels: fatigue.map(d => d[0]),
+        datasets: [{
+            label: "Étudiants",
+            data: fatigue.map(d => d[1])
+        }]
+    }
+});
+
+// ===== PIE =====
+new Chart(document.getElementById('pieChart'), {
+    type: 'pie',
+    data: {
+        labels: fatigue.map(d => d[0]),
+        datasets: [{
+            data: fatigue.map(d => d[1])
+        }]
+    }
+});
+
+// ===== SOMMEIL =====
+new Chart(document.getElementById('sleepChart'), {
+    type: 'bar',
+    data: {
+        labels: sommeil.map(d => d[0]),
+        datasets: [{
+            label: "Sommeil moyen",
+            data: sommeil.map(d => d[1])
+        }]
+    }
+});
+
+// ===== CORRÉLATION =====
+const x = corr.map(d => d[0]);
+const y = corr.map(d => d[1]);
+
+const points = x.map((v,i)=>({x:v,y:y[i]}));
+
+// ===== RÉGRESSION =====
+const n = x.length;
+const sumX = x.reduce((a,b)=>a+b,0);
+const sumY = y.reduce((a,b)=>a+b,0);
+const sumXY = x.reduce((acc,val,i)=>acc+val*y[i],0);
+const sumX2 = x.reduce((acc,val)=>acc+val*val,0);
+
+const a = (n*sumXY - sumX*sumY)/(n*sumX2 - sumX*sumX);
+const b = (sumY - a*sumX)/n;
+
+const minX = Math.min(...x);
+const maxX = Math.max(...x);
+
+const line = [
+    {x:minX, y:a*minX+b},
+    {x:maxX, y:a*maxX+b}
+];
+
+// ===== GRAPH FINAL =====
+new Chart(document.getElementById('corrChart'), {
+    type: 'scatter',
+    data: {
+        datasets: [
+            {
+                label: "Données",
+                data: points
+            },
+            {
+                label: "Régression",
+                type: "line",
+                data: line,
+                borderColor: "blue",
+                fill: false
+            }
+        ]
+    }
+});
+
+</script>
+
+</body>
+</html>
